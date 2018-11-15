@@ -4,9 +4,11 @@
             <div class="row">
               <div class="widget-footer widget-text col-first col-small">
                 <a href="#">
-                  <img class="logo-footer" src="images/logo.png" alt="Logo Organic" />
+                  <img class="logo-footer" src="images/logo-4.png" alt="Agro-Park" />
                 </a>
-                <p>Suspendisse ut diam quis turpis convallis tempus. Sed ultrices lobortis dolor laoreet luctus. Morbi ornare nisi vitae tellus euismod bibendum. Pellentesque posuere iaculis volutpat. </p>
+                <p>Mission: To be a dynamic and responsive organization providing healthier meals for people.
+                    Our Core values are Dependability, Integrity, Reliability, Excellence, Creativity, Tenacity
+ </p>
               </div>
               <div class="widget-footer widget-link col-second col-small">
                 <div class="list-link">
@@ -63,7 +65,7 @@
           <div class="container">
             <div class="row">
               <div class="copy-right-inner">
-                <p>Copyright © 2017 Designed by AuThemes. All rights reserved.</p>
+                <p>Copyright © 2018</p>
                 <div class="widget widget-footer widget-footer-link-inline">
                   <ul class="list-unstyle">
                     <li>
