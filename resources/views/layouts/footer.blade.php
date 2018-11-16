@@ -6,8 +6,8 @@
                 <a href="#">
                   <img class="logo-footer" src="images/logo-4.png" alt="Agro-Park" />
                 </a>
-                <p>Mission: To be a dynamic and responsive organization providing healthier meals for people.
-                    Our Core values are Dependability, Integrity, Reliability, Excellence, Creativity, Tenacity
+                <p>Mission: To be a dynamic and responsive organization providing healthier meals for people.</p>
+             <p>   Core values: Dependability Integrity Reliability Excellence Creativity Tenacity
  </p>
               </div>
               <div class="widget-footer widget-link col-second col-small">

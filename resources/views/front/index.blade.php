@@ -19,7 +19,7 @@
           <li data-transition="fade">
             <img src="images/slider/chicken.jpg" alt="" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="10">
             <div class="tp-caption" data-x="center" data-y="center" data-voffset="['-100','-100','-140','-140']" data-transform_in="y:-80px;opacity:0;s:800;e:easeInOutCubic;" data-transform_out="y:-80px;opacity:0;s:300;" data-start="1000">
-              <h2>Booku chicken like no other</h2>
+              <h2>Booku chicken</h2>
             </div>
             <div class="tp-caption" data-x="center" data-y="center" data-voffset="['20','20','40','40']" data-width="['650','550','480','320']" data-whitespace="normal" data-transform_in="y:80px;opacity:0;s:800;e:easeInOutCubic;" data-transform_out="y:80px;opacity:0;s:300;"
               data-start="1400">
@@ -321,5 +321,5 @@
           </div>
         </div>
       </section>
-                -->
+              -->
 @endsection
