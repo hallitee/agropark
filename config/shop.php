@@ -9,11 +9,11 @@ return [
     'email' => env('SHOP_EMAIL', 'john@doe.com'),
     'phone' => env('SHOP_PHONE', '1 855 791 4041'),
     'warehouse' => [
-        'address_1' => '1600 Amphitheatre Parkway',
-        'address_2' => '',
-        'state' => 'CA',
-        'city' => 'Mountain View',
-        'country' => 'US',
-        'zip' => '94043',
+        'address_1' => '20 ogunnusi road',
+        'address_2' => 'akiode',
+        'state' => 'Lagos',
+        'city' => 'Ikeja',
+        'country' => 'Nigeria',
+        'zip' => '100213',
     ]
 ];

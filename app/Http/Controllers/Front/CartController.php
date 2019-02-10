@@ -65,9 +65,9 @@ class CartController extends Controller
     public function index()
     {
         $courier = $this->courierRepo->findCourierById(request()->session()->get('courierId', 1));
-        $shippingFee = $this->cartRepo->getShippingFee($courier);
+        $shippingFee = 0.0 ;//$this->cartRepo->getShippingFee($courier);
 
-        return view('front.carts.cart', [
+        return view('front.carts.shopcart', [
             'cartItems' => $this->cartRepo->getCartItemsTransformed(),
             'subtotal' => $this->cartRepo->getSubTotal(),
             'tax' => $this->cartRepo->getTax(),
@@ -110,8 +110,8 @@ class CartController extends Controller
 
         $this->cartRepo->addToCart($product, $request->input('quantity'), $options);
 
-        return redirect()->route('cart.index')
-            ->with('message', 'Add to cart successful');
+        return response()->json(["success"=>"success"] );
+        //return redirect()->route('cart.index')->with('message', 'Add to cart successful');
     }
 
     /**

@@ -26,9 +26,12 @@ class Address extends Model
         'address_2',
         'zip',
         'city',
+		'state',
         'state_code',
         'province_id',
         'country_id',
+		'lat',
+		'lng',
         'customer_id',
         'status',
         'phone'

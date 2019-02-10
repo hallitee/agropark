@@ -4,6 +4,7 @@
         <tr>
             <td>ID</td>
             <td>Name</td>
+             <td>Cover</td>
             <td>Quantity</td>
             <td>Price</td>
             <td>Status</td>
@@ -21,6 +22,7 @@
                         {{ $product->name }}
                     @endif
                 </td>
+                <td style="width:25%"><img src="{{ asset("$product->cover") }}" alt="" class="img-thumbnail" style="width:20%;height:auto"></td>
                 <td>{{ $product->quantity }}</td>
                 <td>{{ config('cart.currency') }} {{ $product->price }}</td>
                 <td>@include('layouts.status', ['status' => $product->status])</td>

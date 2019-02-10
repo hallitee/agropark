@@ -19,9 +19,9 @@
     <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('favicons/apple-icon-152x152.png')}}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicons/apple-icon-180x180.png')}}">
     <link rel="icon" type="image/png" sizes="192x192"  href="{{ asset('favicons/android-icon-192x192.png')}}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicons/favicon-32x32.png')}}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicons/favicon-96x96.png')}}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicons/favicon-16x16.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicons/favicon2.png')}}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicons/favicon2.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicons/favicon2.png')}}">
     <link rel="manifest" href="{{ asset('favicons/manifest.json')}}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('favicons/ms-icon-144x144.png')}}">
@@ -53,7 +53,7 @@
 <!-- ./wrapper -->
 
 <script src="{{ asset('js/admin.min.js') }}"></script>
-<script src="{{ asset('//cdn.ckeditor.com/4.8.0/standard/ckeditor.js') }}"></script>
+<!-- <script src="{{ asset('js/ckeditor.js') }}"></script> -->
 <script src="{{ asset('js/scripts.js?v=0.2') }}"></script>
 @yield('js')
 </body>

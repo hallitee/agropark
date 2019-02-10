@@ -86,7 +86,8 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
 
             if (isset($params['parent'])) {
                 $parent = $this->findCategoryById($params['parent']);
-                $category->parent()->associate($parent);
+               // $category->parent()->associate($parent);
+            
             }
 
             $category->save();

@@ -31,6 +31,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
                 Route::get('remove-image-product', 'ProductController@removeImage')->name('product.remove.image');
                 Route::get('remove-image-thumb', 'ProductController@removeThumbnail')->name('product.remove.thumb');
             });
+            Route::namespace('Blogs')->group(function () {
+                Route::resource('blogs', 'BlogController');
+                //Route::resource('customers.addresses', 'CustomerAddressController');
+            });            
             Route::namespace('Customers')->group(function () {
                 Route::resource('customers', 'CustomerController');
                 Route::resource('customers.addresses', 'CustomerAddressController');
@@ -76,6 +80,9 @@ Route::namespace('Auth')->group(function () {
 
 Route::namespace('Front')->group(function () {
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/shop', 'HomeController@shoparea')->name('shop');
+    Route::get('/about', 'HomeController@aboutus')->name('about');
+	Route::get('/contact', 'HomeController@contactus')->name('contact');
     Route::group(['middleware' => ['auth', 'web']], function () {
 
         Route::namespace('Payments')->group(function () {

@@ -25,10 +25,12 @@
                         <div class="form-group">
                             <label for="cover">Cover </label>
                             <input type="file" name="cover" id="cover" class="form-control">
+                            <small class="text-warning">Image size should be  482x455 </small>
                         </div>
                         <div class="form-group">
                             <label for="image">Images</label>
                             <input type="file" name="image[]" id="image" class="form-control" multiple>
+                            <small class="text-warning">Image size should be  482x455 </small><br>
                             <small class="text-warning">You can use ctr (cmd) to select multiple images</small>
                         </div>
                         <div class="form-group">

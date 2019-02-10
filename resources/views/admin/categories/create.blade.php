@@ -27,6 +27,7 @@
                     <div class="form-group">
                         <label for="cover">Cover </label>
                         <input type="file" name="cover" id="cover" class="form-control">
+                        <small class="text-warning">Image size should be  540x560 </small>
                     </div>
                     <div class="form-group">
                         <label for="status">Status </label>

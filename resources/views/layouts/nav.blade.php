@@ -132,21 +132,22 @@
               </form>
             </div>
           </div>
+             <a class="brand-logo" href="#">
+              <img class="img-responsive" src="images/logo-5.png"  alt="" />
+            </a>
           <nav>
             <ul class="menu hidden-xs">
               <li>
                 <a href="{{ route('home')}}">Home</a>
               </li>
               <li>
-                <a href="#">Shop</a>
+                <a href="{{ route('shop')}}">Shop</a>
               </li>
               <li>
-                <a href="#">About</a>
+                <a href="{{ route("about")}}">About</a>
               </li>
             </ul>
-            <a class="brand-logo" href="#">
-              <img class="img-responsive" src="images/logo-5.png"  alt="" />
-            </a>
+
             <ul class="menu hidden-xs">
               <li>
                 <a href="#">Blog</a>
@@ -155,7 +156,18 @@
                 <a href="#">Contact</a>
               </li>
               <li>
-                <a href="#">Feature</a>
+                <a href="#">My account</a>
+                            <ul>
+              <li>
+                <a href="{{route('login')}}">Login</a>
+              </li>
+              <li>
+                <a href="{{route('register')}}">Register</a>
+              </li>
+             <li>
+                <a href="{{ route('cart.index') }}">Cart</a>
+              </li>             
+            </ul>
               </li>
             </ul>
           </nav>
@@ -168,10 +180,11 @@
                 </select>
               </div>
             </div>
-            <div class="widget widget-control-header widget-shop-cart js-widget-shop-cart">
-              <a class="control" href="#">
-                <p class="counter">0</p>
+            <div class="widget widget-control-header widget-shop-cart js-widget-shop-cart items-added">
+              <a class="control" href="{{ route('cart.index')}}">
+                <p class="counter">{{ $cartCount }}</p>
                 <span class="lnr lnr-bag"></span>
+
               </a>
             </div>
             <div class="widget widget-control-header hidden-lg hidden-md hidden-sm">

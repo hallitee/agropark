@@ -26,14 +26,15 @@ trait AddressTransformable
      */
     public function transformAddress(Address $address)
     {
-        $obj = new Address;
+     $obj = new Address;
         $obj->id = $address->id;
         $obj->alias = $address->alias;
         $obj->address_1 = $address->address_1;
         $obj->address_2 = $address->address_2;
         $obj->zip = $address->zip;
         $obj->city = $address->city;
-
+		$obj->lat = $address->lat;
+		$obj->lng = $address->lng;
         if (isset($address->province_id)) {
             $provinceRepo = new ProvinceRepository(new Province);
             $province = $provinceRepo->findProvinceById($address->province_id);
@@ -50,5 +51,7 @@ trait AddressTransformable
         $obj->status = $address->status;
 
         return $obj;
+	
+		return $address;
     }
 }

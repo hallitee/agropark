@@ -13,11 +13,12 @@ use Shippo_Shipment;
 class ShippoShipmentRepository implements ShippingInterface
 {
     /**
+	
      * @var Customer
      */
     protected $customer;
 
-    /**
+    /**Sh
      * The address where to pick up the item for delivery
      *
      * @var $warehouseAddress
@@ -74,6 +75,7 @@ class ShippoShipmentRepository implements ShippingInterface
         ];
 
         $this->warehouseAddress = $warehouse;
+
     }
 
     /**

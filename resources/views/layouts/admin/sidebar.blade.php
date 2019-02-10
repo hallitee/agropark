@@ -90,6 +90,29 @@
                     </li>
                 </ul>
             </li>
+            <li class="treeview @if(request()->segment(2) == 'blogs' || request()->segment(2) == 'comments') active @endif">
+                <a href="#">
+                    <i class="fa fa-list"></i> <span>Blogs</span>
+                    <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{ route('admin.blogs.index') }}"><i class="fa fa-circle-o"></i> List Blogs</a></li>
+                    <li><a href="{{ route('admin.blogs.create') }}"><i class="fa fa-plus"></i> Create Blog</a></li>
+                    <li class="@if(request()->segment(2) == 'comments') active @endif">
+                        <a href="#"><i class="fa fa-comments-o"></i> Blog comments
+                            <span class="pull-right-container">
+                              <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="{{ route('admin.addresses.index') }}"><i class="fa fa-circle-o"></i> List comments</a></li>
+                            <li><a href="{{ route('admin.addresses.create') }}"><i class="fa fa-plus"></i> Create comments</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>            
             <li class="header">ORDERS</li>
             <li class="treeview @if(request()->segment(2) == 'orders') active @endif">
                 <a href="#">

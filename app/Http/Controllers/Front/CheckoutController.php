@@ -97,20 +97,71 @@ class CheckoutController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+	 
+	 public function get_rates($customer, $products){
+		 
+		$customerRepo = new CustomerRepository($customer);
+
+        if ($customerRepo->findAddresses()->count() > 0 && $products->count() > 0) {
+			$deliveryAddress = $customerRepo->findAddresses()->first();
+	
+			
+		}		 
+
+$dAddress = $deliveryAddress->address_1.' '.$deliveryAddress->address_2.','.$deliveryAddress->city.' '.$deliveryAddress->state;		
+		 
+$URL = "https://api.max.ng/v1/pricings/estimate";
+$curl = curl_init($URL);
+
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+$jsonData = ["origin"=>["address"=>"20 ogunnusi road, ikeja lagos","lat"=>env('shop_lat'),"lng"=>env('shop_lng')],"destination"=>["address"=>$dAddress, "lat"=>$deliveryAddress->lat,"lng"=>$deliveryAddress->lng],"service_id"=>"5838ffef-de7a-4593-86fb-7bda18b9667a"]; 
+
+$jsonDataEncoded = json_encode($jsonData);
+curl_setopt($curl, CURLOPT_POST, true);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+
+curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+  "Content-Type: application/json",
+  "Authorization: ".env('MAX_PUB')
+));
+$response=curl_exec($curl);
+
+$arr = json_decode($response, true);
+ if(!is_null($arr)){
+	 session()->put('rates', $arr);
+	 
+ }
+	return $arr;
+	 
+	 }
     public function index(Request $request)
     {
         $products = $this->cartRepo->getCartItems();
         $customer = $request->user();
         $rates = null;
         $shipment_object_id = null;
+		
 
+
+		
         if (env('ACTIVATE_SHIPPING') == 1) {
+			/*
             $shipment = $this->createShippingProcess($customer, $products);
             if (!is_null($shipment)) {
                 $shipment_object_id = $shipment->object_id;
                 $rates = $shipment->rates;
             }
+			*/
+			if(session()->has('rates')){
+			$rates = session()->get('rates');
+			}else{
+			$rates = $this->get_rates($customer, $products);
+			}
         }
+		
+
 
         // Get payment gateways
         $paymentGateways = collect(explode(',', config('payees.name')))->transform(function ($name) {
@@ -119,7 +170,7 @@ class CheckoutController extends Controller
 
         $billingAddress = $customer->addresses()->first();
 
-        return view('front.checkout', [
+        return view('front.checkouts', [
             'customer' => $customer,
             'billingAddress' => $billingAddress,
             'addresses' => $customer->addresses()->get(),
@@ -132,6 +183,8 @@ class CheckoutController extends Controller
             'shipment_object_id' => $shipment_object_id,
             'rates' => $rates
         ]);
+		
+		
     }
 
     /**

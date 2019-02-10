@@ -26,6 +26,7 @@ class GlobalTemplateServiceProvider extends ServiceProvider
     public function boot()
     {
         view()->composer([
+            'layouts.master',
             'layouts.admin.app',
             'layouts.admin.sidebar',
             'admin.shared.products'
@@ -33,12 +34,12 @@ class GlobalTemplateServiceProvider extends ServiceProvider
             $view->with('admin', Auth::guard('employee')->user());
         });
 
-        view()->composer(['layouts.front.app', 'front.categories.sidebar-category'], function ($view) {
+        view()->composer(['layouts.master','layouts.front.app', 'front.categories.sidebar-category'], function ($view) {
             $view->with('categories', $this->getCategories());
             $view->with('cartCount', $this->getCartCount());
         });
 
-        view()->composer(['layouts.front.category-nav'], function ($view) {
+        view()->composer(['','layouts.front.category-nav'], function ($view) {
             $view->with('categories', $this->getCategories());
         });
     }

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Front;
 
 use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Shop\Brands\Brand;
+use App\blog;
+use App\Shop\Categories\category;
 
 class HomeController
 {
@@ -25,9 +28,28 @@ class HomeController
      */
     public function index()
     {
-        $cat1 = $this->categoryRepo->findCategoryById(2);
-        $cat2 = $this->categoryRepo->findCategoryById(3);
-
-        return view('front.index', compact('cat1', 'cat2'));
+    //   $cat = $this->categoryRepo->findCategoryById(6);
+       // $cat2 = $this->categoryRepo->findCategoryById(7);
+     // $cat =  $this->categoryRepo->listCategories('name', 'asc');
+     $brand = Brand::with('products')->get();
+     $cat = category::with('products')->where('status', 1)->get();
+     $blog = blog::orderBy('created_at', 'desc')->first();
+     return view('front.indexnew')->with(['cat'=>$cat,'blog'=>$blog,'brand'=>$brand]); //, compact('cat1', 'cat2'));
     }
+        public function shoparea()
+    {
+        $cat = category::with('products')->where('status', 1)->get();
+      //  $cat = Brand::with('products')->get();
+        return view('front.products.shop-02')->with(['cat'=>$cat]);
+    }
+        public function aboutus()
+    {
+       
+        return view('front.about');
+    }   
+        public function contactus()
+    {
+       
+        return view('front.contact');
+    } 	
 }

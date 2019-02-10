@@ -25,7 +25,7 @@
                     <!-- Tab panes -->
                     <div class="tab-content customer-order-list">
                         <div role="tabpanel" class="tab-pane @if(request()->input('tab') == 'profile')active @endif" id="profile">
-                            {{$customer->name}} <br /><small>{{$customer->email}}</small>
+                         <div class="h2">Welcome <div>  {{$customer->name}} <br /><br /><small>{{$customer->email}}</small>
                         </div>
                         <div role="tabpanel" class="tab-pane @if(request()->input('tab') == 'orders')active @endif" id="orders">
                             @if(!$orders->isEmpty())
@@ -119,7 +119,7 @@
                                         <tr>
                                             <td>{{$address->alias}}</td>
                                             <td>{{$address->address_1}}</td>
-                                            <td>{{$address->address_1}}</td>
+                                            <td>{{$address->address_2}}</td>
                                             <td>{{$address->city}}</td>
                                             @if(isset($address->province))
                                             <td>{{$address->province->name}}</td>

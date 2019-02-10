@@ -50,7 +50,7 @@ class AccountsController extends Controller
 
         $addresses = $customerRepo->findAddresses();
 
-        return view('front.accounts', [
+        return view('front.account', [
             'customer' => $customer,
             'orders' => $this->customerRepo->paginateArrayResults($orders->toArray(), 15),
             'addresses' => $addresses

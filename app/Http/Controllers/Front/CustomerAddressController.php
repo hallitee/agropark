@@ -59,7 +59,7 @@ class CustomerAddressController extends Controller
     {
         $customer = auth()->user();
 
-        return view('front.customers.addresses.list', [
+        return view('front.customers.addresses.lists', [
             'customer' => $customer,
             'addresses' => $customer->addresses
         ]);
@@ -73,7 +73,7 @@ class CustomerAddressController extends Controller
     {
         $customer = auth()->user();
 
-        return view('front.customers.addresses.create', [
+        return view('front.customers.addresses.creates', [
             'customer' => $customer,
             'countries' => $this->countryRepo->listCountries(),
             'cities' => $this->cityRepo->listCities(),
@@ -87,12 +87,23 @@ class CustomerAddressController extends Controller
      */
     public function store(CreateAddressRequest $request)
     {
-        $request['customer_id'] = auth()->user()->id;
+      $request['customer_id'] = auth()->user()->id;
+	  $curl = curl_init();
+$address=$request['address_1'].' '.$request['address_2'].','.$request['city'].' '.$request['state'];
+curl_setopt($curl, CURLOPT_URL, 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCxZBH2FuFjNxCExqEEbLeJXo6MlKLh77Q&address='.rawurlencode($address));
 
+curl_setopt ($curl, CURLOPT_RETURNTRANSFER, 1);
+
+$json = curl_exec($curl);
+$arr = json_decode($json, true);
+$request['lat'] = $arr['results'][0]['geometry']['location']['lat'] ;
+$request['lng'] = $arr['results'][0]['geometry']['location']['lng'] ;	
+	
         $this->addressRepo->createAddress($request->except('_token', '_method'));
 
         return redirect()->route('accounts', ['tab' => 'address'])
-            ->with('message', 'Address creation successful');
+            ->with('message', 'Address creation successful'); 
+			
     }
 
     /**
@@ -100,7 +111,7 @@ class CustomerAddressController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($addressId)
+    public function edit($customerId, $addressId)
     {
         $countries = $this->countryRepo->listCountries();
 
@@ -141,13 +152,12 @@ class CustomerAddressController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy($addressId)
+    public function destroy($customerId, $addressId)
     {
-        $address = $this->addressRepo->findCustomerAddressById($addressId, auth()->user());
-
+		
+        $address = $this->addressRepo->findCustomerAddressById($addressId, auth()->user());	   
         $address->delete();
-
-        return redirect()->route('customer.address.index', $customerId)
-            ->with('message', 'Address delete successful');
+        return redirect()->route('customer.address.index', $customerId)->with('message', 'Address delete successful');
+		
     }
 }

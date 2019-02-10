@@ -117,7 +117,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = $this->categoryRepo->listCategories('name', 'asc')->where('parent_id', 1);
+        $categories = $this->categoryRepo->listCategories('name', 'asc')->where('status', 1);
 
         return view('admin.products.create', [
             'categories' => $categories,
@@ -203,9 +203,8 @@ class ProductController extends Controller
             request()->session()->flash('message', 'Delete successful');
             return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1]);
         }
-
-        $categories = $this->categoryRepo->listCategories('name', 'asc')
-            ->where('parent_id', 1);
+        $categories = $this->categoryRepo->listCategories('name', 'asc')->where('status', 1);
+       // $categories = $this->categoryRepo->listCategories('name', 'asc')->where('parent_id', 1);
 
         return view('admin.products.edit', [
             'product' => $product,
