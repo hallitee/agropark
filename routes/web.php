@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 /**
  * Admin routes
  */
+Route::get('test/success', function(){
+	return view("front.checkout-success");
+});
 Route::namespace('Admin')->group(function () {
     Route::get('admin/login', 'LoginController@showLoginForm')->name('admin.login');
     Route::post('admin/login', 'LoginController@login')->name('admin.login');
@@ -71,6 +74,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
 /**
  * Frontend routes
  */
+ 
 Auth::routes();
 Route::namespace('Auth')->group(function () {
     Route::get('cart/login', 'CartLoginController@showLoginForm')->name('cart.login');
@@ -94,10 +98,11 @@ Route::namespace('Front')->group(function () {
             Route::resource('country.state', 'CountryStateController');
             Route::resource('state.city', 'StateCityController');
         });
-
+		Route::get('getaddr', 'CheckoutController@loadaddress')->name('getaddr');
         Route::get('accounts', 'AccountsController@index')->name('accounts');
         Route::get('checkout', 'CheckoutController@index')->name('checkout.index');
         Route::post('checkout', 'CheckoutController@store')->name('checkout.store');
+		Route::get('checkout/payment', 'CheckoutController@executePaystackPayment')->name('checkout.paystack');
         Route::get('checkout/execute', 'CheckoutController@executePayPalPayment')->name('checkout.execute');
         Route::post('checkout/execute', 'CheckoutController@charge')->name('checkout.execute');
         Route::get('checkout/cancel', 'CheckoutController@cancel')->name('checkout.cancel');
@@ -108,4 +113,5 @@ Route::namespace('Front')->group(function () {
     Route::get("category/{slug}", 'CategoryController@getCategory')->name('front.category.slug');
     Route::get("search", 'ProductController@search')->name('search.product');
     Route::get("{product}", 'ProductController@show')->name('front.get.product');
+	Route::get("product-detail/{id}", 'ProductController@detail')->name('front.get.detail');
 });

@@ -109,9 +109,11 @@ class CartController extends Controller
         }
 
         $this->cartRepo->addToCart($product, $request->input('quantity'), $options);
-
+		if($request->ajax()){
         return response()->json(["success"=>"success"] );
-        //return redirect()->route('cart.index')->with('message', 'Add to cart successful');
+		}else{
+        return redirect()->route('cart.index')->with('message', 'Add to cart successful');
+		}
     }
 
     /**
@@ -139,7 +141,7 @@ class CartController extends Controller
     {
         $this->cartRepo->removeToCart($id);
 
-        request()->session()->flash('message', 'Removed to cart successful');
+        request()->session()->flash('message', 'Removed from cart successful');
         return redirect()->route('cart.index');
     }
 }

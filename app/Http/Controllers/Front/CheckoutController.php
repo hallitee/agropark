@@ -7,6 +7,7 @@ use App\Shop\Cart\Requests\CartCheckoutRequest;
 use App\Shop\Carts\Repositories\Interfaces\CartRepositoryInterface;
 use App\Shop\Carts\Requests\PayPalCheckoutExecutionRequest;
 use App\Shop\Carts\Requests\StripeExecutionRequest;
+use App\Shop\Checkout\CheckoutRepository;
 use App\Shop\Couriers\Repositories\Interfaces\CourierRepositoryInterface;
 use App\Shop\Customers\Customer;
 use App\Shop\Customers\Repositories\CustomerRepository;
@@ -26,6 +27,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use PayPal\Exception\PayPalConnectionException;
+use Paystack;
 
 class CheckoutController extends Controller
 {
@@ -98,27 +100,35 @@ class CheckoutController extends Controller
      * @return \Illuminate\Http\Response
      */
 	 
-	 public function get_rates($customer, $products){
+public function get_rates($customer, $products, $addr=0){
 		 
+	
+			
 		$customerRepo = new CustomerRepository($customer);
 
         if ($customerRepo->findAddresses()->count() > 0 && $products->count() > 0) {
-			$deliveryAddress = $customerRepo->findAddresses()->first();
-	
-			
+			$deliveryAddress = $customerRepo->findAddresses()->first();			
 		}		 
+		if($addr==0){
+		$deliveryAddress = $customerRepo->findAddresses()->first();
+		$dAddress = $deliveryAddress->address_1.' '.$deliveryAddress->address_2.','.$deliveryAddress->city.' '.$deliveryAddress->state;		
+		}
+		else{
+			$deliveryAddress = $customerRepo->findAddresses()->find($addr);
+		$dAddress = $deliveryAddress->address_1.' '.$deliveryAddress->address_2.','.$deliveryAddress->city.' '.$deliveryAddress->state;	
+			
+		}
 
-$dAddress = $deliveryAddress->address_1.' '.$deliveryAddress->address_2.','.$deliveryAddress->city.' '.$deliveryAddress->state;		
-		 
-$URL = "https://api.max.ng/v1/pricings/estimate";
+$URL = "https://private-anon-a1778751b6-maxv1.apiary-proxy.com/v1/pricings/estimate"; // "http://private-anon-a1778751b6-maxv1.apiary-mock.com";
 $curl = curl_init($URL);
 
 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-$jsonData = ["origin"=>["address"=>"20 ogunnusi road, ikeja lagos","lat"=>env('shop_lat'),"lng"=>env('shop_lng')],"destination"=>["address"=>$dAddress, "lat"=>$deliveryAddress->lat,"lng"=>$deliveryAddress->lng],"service_id"=>"5838ffef-de7a-4593-86fb-7bda18b9667a"]; 
+$jsonData = ["origin"=>["lat"=>env('shop_lat'),"lng"=>env('shop_lng')],"destination"=>["lat"=>$deliveryAddress->lat,"lng"=>$deliveryAddress->lng],"service_id"=>env("MAX_SERVICEID")]; 
 
 $jsonDataEncoded = json_encode($jsonData);
+
 curl_setopt($curl, CURLOPT_POST, true);
 curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonDataEncoded);
 
@@ -129,10 +139,13 @@ curl_setopt($curl, CURLOPT_HTTPHEADER, array(
 $response=curl_exec($curl);
 
 $arr = json_decode($response, true);
- if(!is_null($arr)){
-	 session()->put('rates', $arr);
-	 
+
+
+
+ if(!is_null($arr) ){
+	 session()->put('rates', $arr); 
  }
+
 	return $arr;
 	 
 	 }
@@ -157,17 +170,18 @@ $arr = json_decode($response, true);
 			if(session()->has('rates')){
 			$rates = session()->get('rates');
 			}else{
-			$rates = $this->get_rates($customer, $products);
-			}
+			$rates = $this->get_rates($customer, $products, 0);			
+			//return $rates;		
+			
+			}	
+
         }
-		
-
-
+		//return  $rates;
         // Get payment gateways
         $paymentGateways = collect(explode(',', config('payees.name')))->transform(function ($name) {
             return config($name);
         })->all();
-
+			
         $billingAddress = $customer->addresses()->first();
 
         return view('front.checkouts', [
@@ -215,7 +229,21 @@ $arr = json_decode($response, true);
                 $customer = $this->customerRepo->findCustomerById(auth()->id());
                 $customerRepo = new CustomerRepository($customer);
                 $customerRepo->charge($this->cartRepo->getTotal(2, $shippingFee), $details);
+				
                 break;
+            case 'paystack':
+
+                /*$details = [
+                    'description' => 'Stripe payment',
+                    'metadata' => $this->cartRepo->getCartItems()->all()
+                ];
+
+                $customer = $this->customerRepo->findCustomerById(auth()->id());
+                $customerRepo = new CustomerRepository($customer);
+                $customerRepo->charge($this->cartRepo->getTotal(2, $shippingFee), $details);
+				*/
+				return 'Will now run paystack';//Paystack::getAuthorizationUrl()->redirectNow();
+                break;				
             default:
         }
     }
@@ -226,6 +254,14 @@ $arr = json_decode($response, true);
      * @param PayPalCheckoutExecutionRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
+	     public function loadaddress(Request $request)
+    {
+	
+		$products = $this->cartRepo->getCartItems();
+        $customer = $request->user();
+		$rates = $this->get_rates($customer, $products, $request->addr);
+		return response()->json($rates['data']);
+    }
     public function executePayPalPayment(PayPalCheckoutExecutionRequest $request)
     {
         try {
@@ -239,27 +275,55 @@ $arr = json_decode($response, true);
             throw new PaypalRequestError($e->getMessage());
         }
     }
+    public function executePaystackPayment(Request $request)
+    {
+			
+			$paymentDetails = Paystack::getPaymentData();
+			
+			if($paymentDetails['data']['status']=='success'){
+				//return $paymentDetails;
+				//return Cart::total();
+					try {
+						$customer = $this->customerRepo->findCustomerById(auth()->id());
+						$stripeRepo = new StripeRepository($customer);
 
+						$stripeRepo->execute(
+							$paymentDetails,
+							$request->all(),
+						    floatval(preg_replace('/[^\d.]/', '', Cart::total())),
+							Cart::tax()
+						);
+						return redirect()->route('checkout.success')->with('message', 'Paystack payment successful!');
+					} catch (StripeChargingErrorException $e) {
+						Log::info($e->getMessage());
+						return redirect()->route('checkout.index')->with('error', 'There is a problem processing your request.');
+					}
+							
+				
+				
+				
+				//return $this->success();
+			}
+			else{
+				
+				
+			}
+    }
     /**
      * @param StripeExecutionRequest $request
      * @return \Stripe\Charge
      */
-    public function charge(StripeExecutionRequest $request)
+    public function charge(Request $request)
     {
-        try {
-            $customer = $this->customerRepo->findCustomerById(auth()->id());
-            $stripeRepo = new StripeRepository($customer);
-
-            $stripeRepo->execute(
-                $request->all(),
-                Cart::total(),
-                Cart::tax()
-            );
-            return redirect()->route('checkout.success')->with('message', 'Stripe payment successful!');
-        } catch (StripeChargingErrorException $e) {
-            Log::info($e->getMessage());
-            return redirect()->route('checkout.index')->with('error', 'There is a problem processing your request.');
-        }
+			$customer = $this->customerRepo->findCustomerById(auth()->id());
+			$request->metadata = json_encode($array = ['shippingFee' => $request->shippingFee,'selected_address'=>$request->sel_addr,'cart'=>$this->cartRepo->getCartItems()->all(),'customer'=>$customer]);
+    		$req = floatval(($request->amount+$request->shippingFee)*100);
+			//echo $req;
+			$request->amount=$req;
+			$request->key = config('paystack.secretKey');
+			//return $request;
+			return Paystack::getAuthorizationUrl()->redirectNow();
+  
     }
 
     /**

@@ -5,7 +5,8 @@
         <th class="col-md-2 col-lg-5">Name</th>
         <th class="col-md-2 col-lg-2">Quantity</th>
         <th class="col-md-2 col-lg-1"></th>
-        <th class="col-md-2 col-lg-2">Price</th>
+        <th class="col-md-2 col-lg-1">Price</th>
+		<th class="col-md-2 col-lg-1">Total</th>
         </thead>
         <tfoot>
         <tr>
@@ -13,6 +14,7 @@
             <td class="bg-warning"></td>
             <td class="bg-warning"></td>
             <td class="bg-warning"></td>
+			<td class="bg-warning"></td>
             <td class="bg-warning">&#8358;{{ number_format($subtotal, 2, '.', ',') }}</td>
         </tr>
         <tr>
@@ -20,6 +22,7 @@
             <td class="bg-warning"></td>
             <td class="bg-warning"></td>
             <td class="bg-warning"></td>
+			 <td class="bg-warning"></td>
             <td class="bg-warning">&#8358; <span id="shippingFee">{{ number_format(0, 2) }}</span></td>
         </tr>
         <tr>
@@ -27,6 +30,7 @@
             <td class="bg-warning"></td>
             <td class="bg-warning"></td>
             <td class="bg-warning"></td>
+			 <td class="bg-warning"></td>
             <td class="bg-warning">&#8358; {{ number_format($tax, 2) }}</td>
         </tr>
         <tr>
@@ -34,6 +38,7 @@
             <td class="bg-success"></td>
             <td class="bg-success"></td>
             <td class="bg-success"></td>
+			  <td class="bg-success"></td>
             <td class="bg-success">&#8358; <span id="grandTotal" data-total="{{ $total }}">{{ number_format($total, 2, '.', ',') }}</span></td>
         </tr>
         </tfoot>
@@ -81,6 +86,7 @@
                     </form>
                 </td>
                 <td>&#8358;{{ number_format($cartItem->price, 2) }}</td>
+				<td>&#8358;{{ number_format(($cartItem->qty*$cartItem->price),2)  }}</td>
             </tr>
         @endforeach
         </tbody>
@@ -90,12 +96,15 @@
     $(document).ready(function () {
         let courierRadioBtn = $('input[name="rate"]');
         courierRadioBtn.click(function () {
-            $('#shippingFee').text($(this).data('fee'));
+            $('#shippingFee').text($(this).val());
+			$("input[name='shippingFee']").val($(this).val());
             let totalElement = $('span#grandTotal');
-            let shippingFee = $(this).data('fee');
+            let shippingFee = $(this).val();
             let total = totalElement.data('total');
             let grandTotal = parseFloat(shippingFee) + parseFloat(total);
+			$("input[name='amount']").val(total);
             totalElement.html(grandTotal.toFixed(2));
+			$("#pay_row").show();
         });
     });
 </script>

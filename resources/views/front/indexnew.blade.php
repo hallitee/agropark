@@ -131,7 +131,7 @@
                     </div> -->
                     <figcaption class="desc">
                       <h3>
-                        <a class="product-name" href="product-detail.html">Booku Chicken</a>
+                        <a class="product-name" href="{{ route('shop')}}">Booku Chicken</a>
                       </h3>
                       <span class="price">From &#x20A6;3000</span>
                     </figcaption>
@@ -166,7 +166,7 @@
                     </div> -->
                     <figcaption class="desc">
                       <h3>
-                        <a class="product-name" href="product-detail.html">Spices</a>
+                        <a class="product-name" href="{{ route('shop')}}">Spices</a>
                       </h3>
                       <span class="price">From &#x20A6;200</span>
                     </figcaption>
@@ -201,7 +201,7 @@
                     </div> -->
                     <figcaption class="desc">
                       <h3>
-                        <a class="product-name" href="product-detail.html">Booku Goat</a>
+                        <a class="product-name" href="{{ route('shop')}}">Booku Goat</a>
                       </h3>
                       <span class="price">From &#x20A6; 8000</span>
                     </figcaption>
@@ -236,7 +236,7 @@
                     </div> -->
                     <figcaption class="desc">
                       <h3>
-                        <a class="product-name" href="product-detail.html">Onion</a>
+                        <a class="product-name" href="{{ route('shop')}}">Onion</a>
                       </h3>
                       <span class="price">From &#x20A6; 700</span>
                     </figcaption>

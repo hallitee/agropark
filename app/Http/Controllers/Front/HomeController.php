@@ -6,6 +6,7 @@ use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Shop\Brands\Brand;
 use App\blog;
 use App\Shop\Categories\category;
+use App\Shop\Products\Product;
 
 class HomeController
 {
@@ -38,7 +39,7 @@ class HomeController
     }
         public function shoparea()
     {
-        $cat = category::with('products')->where('status', 1)->get();
+        $cat = category::with('products.images','products.attributes')->where('status', 1)->get();
       //  $cat = Brand::with('products')->get();
         return view('front.products.shop-02')->with(['cat'=>$cat]);
     }

@@ -26,9 +26,10 @@
     </td>
 </tr>
 @section('js')
+	<script src="https://js.paystack.co/v1/inline.js"></script>
     <script src="{{ url('https://checkout.stripe.com/checkout.js') }}"></script>
     <script type="text/javascript">
-
+	console.log("stripe checkout initiated");
         function setTotal(total, shippingCost) {
             let computed = +shippingCost + parseFloat(total);
             $('#total').html(computed.toFixed(2));
@@ -37,7 +38,7 @@
         function setShippingFee(cost) {
             el = '#shippingFee';
             $(el).html(cost);
-            $('#shippingFeeC').val(cost);
+            $('#shippingFee').val(cost);
         }
 
         function setCourierDetails(courierId) {
@@ -85,9 +86,9 @@
                 let courierId = $(courier + ':checked').val();
                 let total = $('#total').data('total');
 
-                setShippingFee(shippingCost);
-                setCourierDetails(courierId);
-                setTotal(total, shippingCost);
+               console.log(setShippingFee(shippingCost));
+               console.log( setCourierDetails(courierId));
+               console.log( setTotal(total, shippingCost));
             }
 
             let handler = StripeCheckout.configure({
@@ -104,7 +105,7 @@
 
             document.getElementById('paywithstripe').addEventListener('click', function(e) {
                 let total = parseFloat("{{ $total }}");
-                let shipping = parseFloat($('#shippingFeeC').val());
+                let shipping = parseFloat($('#shippingFee').val());
                 let amount = total + shipping;
                 // Open Checkout with further options:
                 handler.open({
@@ -123,4 +124,5 @@
             });
         });
     </script>
+
 @endsection

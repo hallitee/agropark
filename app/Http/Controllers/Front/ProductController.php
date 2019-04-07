@@ -44,7 +44,23 @@ class ProductController extends Controller
             'products' => $this->productRepo->paginateArrayResults($products->all(), 10)
         ]);
     }
+  public function detail($r)
+    {
+			
+	     $product = $this->productRepo->findProductBySlug(['slug' => $r]);
+        $images = $product->images()->get();
+        $category = $product->categories()->first();
+        $productAttributes = $product->attributes;
 
+        return response()->json(['product'=>$product,'images'=>$images]); /*view('front.products.product', compact(
+            'product',
+            'images',
+            'productAttributes',
+            'category',
+            'combos'
+        ));
+		*/
+	}
     /**
      * Get the product
      *

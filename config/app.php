@@ -156,6 +156,7 @@ return [
         Laravel\Cashier\CashierServiceProvider::class,
         Jsdecena\Baserepo\BaseRepositoryProvider::class,
         \Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
+		Unicodeveloper\Paystack\PaystackServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -218,6 +219,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+		'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
 
     ],
 

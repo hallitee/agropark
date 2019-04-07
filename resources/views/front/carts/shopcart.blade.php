@@ -37,7 +37,8 @@
                                 <th class="col-md-2 col-lg-5">Name</th>
                                 <th class="col-md-2 col-lg-2">Quantity</th>
                                 <th class="col-md-2 col-lg-1"></th>
-                                <th class="col-md-2 col-lg-2">Price</th>
+                                <th class="col-md-2 col-lg-1">Price</th>
+								 <th class="col-md-2 col-lg-1">Total</th>
                             </thead>
                             <tfoot>
                             <tr>
@@ -45,7 +46,8 @@
                                 <td class="bg-warning"></td>
                                 <td class="bg-warning"></td>
                                 <td class="bg-warning"></td>
-                                <td class="bg-warning">{{config('cart.currency')}} {{ number_format($subtotal, 2, '.', ',') }}</td>
+								 <td class="bg-warning"></td>
+                                <td class="bg-warning">&#8358; {{ number_format($subtotal, 2, '.', ',') }}</td>
                             </tr>
                             @if(isset($shippingFee) && $shippingFee != 0)
                             <tr>
@@ -53,7 +55,8 @@
                                 <td class="bg-warning"></td>
                                 <td class="bg-warning"></td>
                                 <td class="bg-warning"></td>
-                                <td class="bg-warning">{{config('cart.currency')}} {{ $shippingFee }}</td>
+								<td class="bg-warning"></td>
+                                <td class="bg-warning">&#8358; {{ $shippingFee }}</td>
                             </tr>
                             @endif
                             <tr>
@@ -61,13 +64,15 @@
                                 <td class="bg-warning"></td>
                                 <td class="bg-warning"></td>
                                 <td class="bg-warning"></td>
-                                <td class="bg-warning">{{config('cart.currency')}} {{ number_format($tax, 2) }}</td>
+								<td class="bg-warning"></td>
+                                <td class="bg-warning">&#8358; {{ number_format($tax, 2) }}</td>
                             </tr>
                             <tr>
                                 <td class="bg-success">Total</td>
                                 <td class="bg-success"></td>
                                 <td class="bg-success"></td>
                                 <td class="bg-success"></td>
+								<td class="bg-success"></td>
                                 <td class="bg-success">&#8358;{{ number_format($total, 2, '.', ',') }}</td>
                             </tr>
                             </tfoot>
@@ -112,6 +117,7 @@
                                         </form>
                                     </td>
                                     <td>&#8358;{{ number_format($cartItem->price, 2) }}</td>
+									<td>&#8358;{{ number_format(($cartItem->qty*$cartItem->price),2)  }}</td>
                                 </tr>
                             @endforeach
                             </tbody>

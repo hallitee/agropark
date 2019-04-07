@@ -25,7 +25,7 @@
 	  <br>
       <section class="boxed-sm">
      <div class="container product-in-cart-list">
-        @if(!$products->isEmpty())
+        @if(!($products->isEmpty()))
             <div class="row">
       
                 <div class="col-md-12 content">
@@ -46,10 +46,11 @@
                                         <thead>
                                             <th>Alias</th>
                                             <th>Address</th>
-                                            <th>Billing Address</th>
+                                            <th></th>
                                             <th>Delivery Address</th>
                                         </thead>
                                         <tbody>
+										{{--
                                             @foreach($addresses as $key => $address)
                                                 <tr>
                                                     <td>{{ $address->alias }}</td>
@@ -78,9 +79,9 @@
                                                         @endif
                                                     </td>
                                                 </tr>
-                                            @endforeach
+										@endforeach --}}
                                         </tbody>
-                                        <tbody style="display: none" id="sameDeliveryAddressRow">
+                                        <tbody id="sameDeliveryAddressRow">
                                             @foreach($addresses as $key => $address)
                                                 <tr>
                                                     <td>{{ $address->alias }}</td>
@@ -99,7 +100,7 @@
                                                                     type="radio"
                                                                     value="{{ $address->id }}"
                                                                     name="delivery_address"
-                                                                    @if(old('') == $address->id) checked="checked"  @endif>
+                                                                   >
                                                         </label>
                                                     </td>
                                                 </tr>
@@ -109,34 +110,44 @@
                                 </div>
                             </div>
                         @endif
-                        @if(!is_null($rates))
-                            <div class="row">
+                      
+                            <div class="row" id="courier_row" style="display:none">
                                 <div class="col-md-12">
                                     <legend><i class="fa fa-truck"></i> Courier</legend>
                                     <ul class="list-unstyled">
-                                        
-                                            <li class="col-md-4">
+                                        @if(!is_null($rates))  
+                                            <li class="col-md-4 pull-left text-left">
                                                 <label class="radio">
-                                                    <input type="radio" name="rate" data-fee="{{ $rates['data']['delivery_fee'] }}" value="{{ $rates['data']['delivery_fee']}}">
+                                                    <input type="radio" name="rate" id="maxinput" data-fee="{{ $rates['data']['delivery_fee'] }}" value="{{ $rates['data']['delivery_fee']}}" required>
                                                 </label>
                                                 <img src="{{ asset('images/maxng.png') }}" style="height:50px;width:120px" alt="courier" class="img-thumbnail" /> <br />
-                                                <p><strong>MaxNG </strong>- <span> &#8358;{{ $rates['data']['delivery_fee'] }}</span></p>
+                                                <p><strong>MaxNG </strong>- &#8358;<span id="maxrate"> {{ $rates['data']['delivery_fee'] }}</span></p>
                                             </li>
-				 <li class="col-md-4">
-				 
-				 </li>
-               <li class="col-md-4">
+										@else
+                                            <li class="col-md-4 pull-left text-left">
                                                 <label class="radio">
-                                                    <input type="radio" name="rate" data-fee="0" value="0">
+                                                    <input type="radio" name="rate" data-fee="2500" value="2500">
+                                                </label>
+                                                <img src="{{ asset('images/maxng.png') }}" style="height:50px;width:120px" alt="courier" class="img-thumbnail" /> <br />
+                                                <p><strong>MaxNG </strong>- &#8358;<span> {{ courier::first()->cost }}<i>(flat fee)</i></span></p>
+                                            </li>											
+												
+										 @endif
+											 <li class="col-md-4">
+											 
+											 </li>
+											<li class="col-md-4 pull-right text-right">
+                                                <label class="radio">
+                                                    <input type="radio" name="rate" data-fee="0" value="0" required>
                                                 </label>
                                                 <img src="{{ asset('images/pickup.png') }}" style="height:50px;width:120px" alt="courier" class="img-thumbnail" /> <br />
-                                                <p><strong>Self Pickup </strong> -<span> &#8358;0.00</span></p>
+                                                <p><strong>Self Pickup </strong> -&#8358;<span> 0.00</span></p>
                                             </li>											
                                     </ul>
                                 </div>
                             </div> <br>
-                        @endif
-                        <div class="row">
+                       
+                        <div class="row" id="pay_row" style="display:none">
                             <div class="col-md-12">
                                 <legend><i class="fa fa-credit-card"></i> Payment</legend>
                                 @if(isset($payments) && !empty($payments))

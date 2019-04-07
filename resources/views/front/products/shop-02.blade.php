@@ -44,7 +44,7 @@
                     </a>
                     <div class="product-control-wrapper bottom-right">
                       <div class="wrapper-control-item">
-                        <a class="js-quick-view" href="#" type="button" data-toggle="modal" data-target="#quick-view-product">
+                        <a class="js-quick-view"  href="#" type="button" value="{{$p->slug}}" data-toggle="modal" data-target="#{{$p->slug}}">
                           <span class="lnr lnr-eye"></span>
                         </a>
                       </div>
@@ -74,39 +74,110 @@
                   </figcaption>
                 </div>
               </figure>
+	<div class="modal fade" id="{{$p->slug}}" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-quickview woocommerce" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="woocommerce-product-gallery">
+                    <div class="main-carousel-product-quick-view">
+					@foreach($p->images as $m)
+                      <div class="item">
+                        <img class="img-responsive" src="@if(!$m->src){{asset('storage/'.$p->cover)}} @else {{asset('storage/'.$m->src)}} @endif" alt="product thumbnail" />
+                      </div>
+					@endforeach
+
+                    </div>
+                    <div class="thumbnail-carousel-product-quickview">
+					@foreach($p->images as $m)
+                      <div class="item">
+                        <img class="img-responsive" src="@if(!$m->src){{asset('storage/'.$p->cover)}} @else {{asset('storage/'.$m->src)}} @endif" alt="product thumbnail" />
+                      </div>
+					@endforeach
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="summary">
+                    <div class="desc">
+                      <div class="header-desc">
+                        <h2 class="product-title">{{$p->name}}</h2>
+                        <p class="price">&#8358;{{$p->price}}</p>
+                      </div>
+                      <div class="body-desc">
+                        <div class="woocommerce-product-details-short-description">
+                          <p>{{$p->description}} </p>
+                        </div>
+                      </div>
+                      <div class="footer-desc">
+                        <form class="cart" action="cart" method="POST">
+						 {{ csrf_field() }}
+                          <div class="quantity buttons-added">
+                            <input class="minus" value="-" type="button"/>
+                            <input class="input-text qty text" step="1" min="1" max="" name="quantity" value="1" title="Qty" size="4" pattern="[0-9]*" inputmode="numeric" type="number" />
+                            <input class="plus" value="+" type="button" />
+                          </div>
+                          <div class="group-btn-control-wrapper">
+						 
+                           <input type="hidden"  name="product" value="{{ $p->id }}">
+                            <button  type="submit" class="btn btn-brand addCart">ADD TO CART</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <div class="product-meta">
+                      <p class="posted-in">Category:
+                        <a href="#" rel="tag">{{$c->name }}</a>
+                      </p>
+                    </div>
+                    <div class="widget-social align-left">
+                      <ul>
+                        <li>
+                          <a class="facebook" data-toggle="tooltip" title="Facebook" href="http://www.facebook.com/agropark">
+                            <i class="fa fa-facebook"></i>
+                          </a>
+                        </li>
+                        <li>
+                          <a class="pinterest" data-toggle="tooltip" title="Pinterest" href="http://www.pinterest.com/agropak">
+                            <i class="fa fa-pinterest"></i>
+                          </a>
+                        </li>
+                        <li>
+                          <a class="twitter" data-toggle="tooltip" title="Twitter" href="http://www.twitter.com/agropark">
+                            <i class="fa fa-twitter"></i>
+                          </a>
+                        </li>
+                        <li>
+                          <a class="google-plus" data-toggle="tooltip" title="Google Plus" href="https://plus.google.com/agropark">
+                            <i class="fa fa-google-plus"></i>
+                          </a>
+                        </li>
+                        <li>
+                          <a class="instagram" data-toggle="tooltip" title="Instagram" href="https://instagram.com/agropark">
+                            <i class="fa fa-instagram"></i>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+			</div>
+         
+		 </div>
+        </div>
+      </div>
 			@endforeach
   @endforeach			
 			</div>
-            <div class="row">
-			
-              <div class="col-md-12 text-right">
-			  
-                <nav>
-                  <ul class="pagination pagination-style-1">
-                    <li>
-                      <a class="prev page-numbers" href="#">
-                        <i class="fa fa-angle-left"></i>
-                      </a>
-                    </li>
-                    <li>
-                      <a class="page-numbers" href="#">3</a>
-                    </li>
-                    <li>
-                      <a class="page-numbers" href="#">4</a>
-                    </li>
-                    <li>
-                      <span class="page-numbers current">5</span>
-                    </li>
-                    <li>
-                      <a class="next page-numbers" href="#">
-                        <i class="fa fa-angle-right"></i>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
-				
-              </div>
-            </div>
+
           </div>
         </div>
       </section>

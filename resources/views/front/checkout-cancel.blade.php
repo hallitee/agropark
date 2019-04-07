@@ -1,4 +1,4 @@
-@extends('layouts.front.app')
+@extends('layouts.master')
 
 @section('content')
     <div class="container product-in-cart-list">

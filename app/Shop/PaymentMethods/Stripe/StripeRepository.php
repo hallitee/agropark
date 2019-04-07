@@ -35,37 +35,39 @@ class StripeRepository
      * @return Charge Stripe charge object
      * @throws StripeChargingErrorException
      */
-    public function execute(array $data, $total, $tax) : Charge
+    public function execute($payStatus, array $data, $total, $tax) 
     {
         try {
 
-            $shipping = 0;
-            $totalComputed = $total + $shipping;
+			$shipping = intval($payStatus['data']['metadata']['shippingFee']);
+			return $shipping;
+            $totalComputed =  intval($total) + $shipping;
+			echo $totalComputed;
+         //   $customerRepo = new CustomerRepository($this->customer);
+            //$options['source'] = $data['stripeToken'];
+            //$options['currency'] = config('cart.currency');
 
-            $customerRepo = new CustomerRepository($this->customer);
-            $options['source'] = $data['stripeToken'];
-            $options['currency'] = config('cart.currency');
-
-            if ($charge = $customerRepo->charge($totalComputed, $options)) {
+          //  if ($charge = $customerRepo->charge($totalComputed, $options)) {
                 $checkoutRepo = new CheckoutRepository;
                 $checkoutRepo->buildCheckoutItems([
                     'reference' => Uuid::uuid4()->toString(),
                     'courier_id' => 1,
                     'customer_id' => $this->customer->id,
-                    'address_id' => $data['billing_address'],
+                    'address_id' => $payStatus['data']['metadata']['selected_address'],
                     'order_status_id' => 1,
-                    'payment' => strtolower(config('stripe.name')),
+                    'payment' => strtolower(config('paystack.name')),
                     'discounts' => 0,
                     'total_products' => $total,
                     'total' => $totalComputed,
-                    'total_paid' => $totalComputed,
+                    'total_paid' => intval($payStatus['data']['amount'])/100,
+					'total_shpping'=>$shipping,
                     'tax' => $tax
                 ]);
 
                 Cart::destroy();
-            }
+           // }
 
-            return $charge;
+         //   return $checkoutRepo;
         } catch (\Exception $e) {
             throw new StripeChargingErrorException($e);
         }
