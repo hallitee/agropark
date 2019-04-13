@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Orders;
 
+use App\Shop\Shipping\MaxShipping\MaxShipping;
 use App\Shop\Addresses\Repositories\Interfaces\AddressRepositoryInterface;
 use App\Shop\Addresses\Transformations\AddressTransformable;
 use App\Shop\Couriers\Courier;
@@ -70,6 +71,12 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+	 public function pickupdates(Request $req){
+		 
+		 $m = new MaxShipping;
+		 $date = $m->pickup_window($req->date);
+		 return response()->json($date);
+	 }
     public function index()
     {
         $list = $this->orderRepo->listOrders('created_at', 'desc');

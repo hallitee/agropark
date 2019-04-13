@@ -36,8 +36,8 @@
                         <input type="text" name="zip" id="zip" placeholder="Zip code" class="form-control" value="{{ old('zip') }}">
                     </div>
                     <div class="form-group">
-                        <label for="phone">Your Phone </label>
-                        <input type="text" name="phone" id="phone" placeholder="Phone number" class="form-control" value="{{ old('phone') }}">
+                        <label for="phone">Your Phone <span class="text-danger">*</span> </label>
+                        <input type="text" name="phone" id="phone" placeholder="Phone number" class="form-control" value="{{ old('phone') }}" required>
                     </div>
                 </div>
                 <!-- /.box-body -->

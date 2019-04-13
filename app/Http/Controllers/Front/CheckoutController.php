@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Shop\Shipping\Maxshipping\MaxShipping;
 use App\Shop\Addresses\Repositories\Interfaces\AddressRepositoryInterface;
 use App\Shop\Cart\Requests\CartCheckoutRequest;
 use App\Shop\Carts\Repositories\Interfaces\CartRepositoryInterface;
@@ -100,51 +101,13 @@ class CheckoutController extends Controller
      * @return \Illuminate\Http\Response
      */
 	 
-public function get_rates($customer, $products, $addr=0){
-		 
+public function get_rates($customer, $products, $addr){
 	
-			
-		$customerRepo = new CustomerRepository($customer);
-
-        if ($customerRepo->findAddresses()->count() > 0 && $products->count() > 0) {
-			$deliveryAddress = $customerRepo->findAddresses()->first();			
-		}		 
-		if($addr==0){
-		$deliveryAddress = $customerRepo->findAddresses()->first();
-		$dAddress = $deliveryAddress->address_1.' '.$deliveryAddress->address_2.','.$deliveryAddress->city.' '.$deliveryAddress->state;		
-		}
-		else{
-			$deliveryAddress = $customerRepo->findAddresses()->find($addr);
-		$dAddress = $deliveryAddress->address_1.' '.$deliveryAddress->address_2.','.$deliveryAddress->city.' '.$deliveryAddress->state;	
-			
-		}
-
-$URL = "https://private-anon-a1778751b6-maxv1.apiary-proxy.com/v1/pricings/estimate"; // "http://private-anon-a1778751b6-maxv1.apiary-mock.com";
-$curl = curl_init($URL);
-
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-$jsonData = ["origin"=>["lat"=>env('shop_lat'),"lng"=>env('shop_lng')],"destination"=>["lat"=>$deliveryAddress->lat,"lng"=>$deliveryAddress->lng],"service_id"=>env("MAX_SERVICEID")]; 
-
-$jsonDataEncoded = json_encode($jsonData);
-
-curl_setopt($curl, CURLOPT_POST, true);
-curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonDataEncoded);
-
-curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-  "Content-Type: application/json",
-  "Authorization: ".env('MAX_PUB')
-));
-$response=curl_exec($curl);
-
-$arr = json_decode($response, true);
-
-
-
- if(!is_null($arr) ){
+$m = new maxShipping;
+$arr = $m->pricing_estimates($customer, $products, $addr);
+ /*if(!is_null($arr) ){
 	 session()->put('rates', $arr); 
- }
+ }*/
 
 	return $arr;
 	 
@@ -167,13 +130,14 @@ $arr = json_decode($response, true);
                 $rates = $shipment->rates;
             }
 			*/
-			if(session()->has('rates')){
+			$rates = $this->get_rates($customer, $products, 0);			
+			//return $rates;	
+			/*if(session()->has('rates')){
 			$rates = session()->get('rates');
 			}else{
-			$rates = $this->get_rates($customer, $products, 0);			
-			//return $rates;		
+	
 			
-			}	
+			}	*/
 
         }
 		//return  $rates;
@@ -315,6 +279,7 @@ $arr = json_decode($response, true);
      */
     public function charge(Request $request)
     {
+		    //return $request;
 			$customer = $this->customerRepo->findCustomerById(auth()->id());
 			$request->metadata = json_encode($array = ['shippingFee' => $request->shippingFee,'selected_address'=>$request->sel_addr,'cart'=>$this->cartRepo->getCartItems()->all(),'customer'=>$customer]);
     		$req = floatval(($request->amount+$request->shippingFee)*100);

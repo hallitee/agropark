@@ -10,7 +10,7 @@
 				  <hr class="my-4">
 				  <p>To verify your order details click below</p>
 				  <p class="lead">
-					<a class="btn btn-primary btn-lg" href="{{ route("accounts")."?tab=profile"}}" role="button">Order details</a>
+					<a class="btn btn-primary btn-lg" href="{{ route("accounts")."?tab=orders"}}" role="button">Order details</a>
 				  </p>
 				</div>
 		</div>

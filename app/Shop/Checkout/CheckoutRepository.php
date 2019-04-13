@@ -22,6 +22,7 @@ class CheckoutRepository
         $order = $orderRepo->createOrder([
             'reference' => $data['reference'],
             'courier_id' => $data['courier_id'],
+			'courier' =>	$data['courier'],
             'customer_id' => $data['customer_id'],
             'address_id' => $data['address_id'],
             'order_status_id' => $data['order_status_id'],

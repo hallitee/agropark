@@ -23,6 +23,38 @@
         </div>
         <div class="box">
             <div class="box-body">
+                <h4> <i class="fa fa-truck"></i> Create Shipping Pickup</h4>
+				<table class="table"> 
+				 <thead>
+                            <th class="col-md-1">Date</th>
+                            <th class="col-md-2">Pickup window</th>
+                            <th class="col-md-2">Schedule</th>
+                            <th class="col-md-2">Status</th>
+                          
+                            </thead>
+							<tbody>
+							<tr>
+							<form action="admin/orders/pickuprequest" method="POST">
+							<td><input class="form-control" id="pickup_date" type="date"  placeholder="YYYY-MM-DD" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"></td>
+							<td> <select class="form-control" id="pickSel"></select></td>
+							<td><button type="button" id="btnReq" class="btn btn-info">Schedule Order Delivery</button>
+							</td>
+							<td></td>				
+							<input type="hidden" name="pDate" id="pDate">		
+							<input type="hidden" name="pStart" id="pStart">								
+							<input type="hidden" name="pEnd" id="pEnd">	
+							<input type="hidden" name="cust" id="cust" value="{{ $customer->id }}">	
+							<input type="hidden" name="order" id="order" value="{{ $order->id }}">	
+							</form>
+							</tr>
+							</tbody>
+				
+				</table>
+            </div>
+            <!-- /.box-body -->
+        </div>		
+        <div class="box">
+            <div class="box-body">
                 <h4> <i class="fa fa-shopping-bag"></i> Order Information</h4>
                 <table class="table">
                     <thead>
@@ -48,6 +80,12 @@
                         <td class="bg-warning">Subtotal</td>
                         <td class="bg-warning">{{ $order['total_products'] }}</td>
                     </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="bg-warning">Shipping</td>
+                        <td class="bg-warning">{{ $order['total_shipping'] }}</td>
+                    </tr>					
                     <tr>
                         <td></td>
                         <td></td>
@@ -124,7 +162,7 @@
                 @endif
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <h4> <i class="fa fa-map-marker"></i> Address</h4>
                             <table class="table">
                                 <thead>

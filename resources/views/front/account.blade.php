@@ -35,6 +35,7 @@
                                 <tbody>
                                 <tr>
                                     <td>Date</td>
+									 <td>Order #</td>
                                     <td>Total</td>
                                     <td>Status</td>
                                 </tr>
@@ -47,7 +48,7 @@
                                             <!-- Button trigger modal -->
                                             <!-- Modal -->
                                             <div class="modal fade" id="order_modal_{{$order['id']}}" tabindex="-1" role="dialog" aria-labelledby="MyOrders">
-                                                <div class="modal-dialog" role="document">
+                                                <div class="modal-dialog modal-lg" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -83,6 +84,7 @@
                                                 </div>
                                             </div>
                                         </td>
+										<td><a data-toggle="modal" data-target="#order_modal_{{$order['id']}}" title="Show order" href="javascript: void(0)">{{  $order['reference'] }}</a> </td>
                                         <td><span class="label @if($order['total'] != $order['total_paid']) label-danger @else label-success @endif">{{ config('cart.currency') }} {{ $order['total'] }}</span></td>
                                         <td><p class="text-center" style="color: #ffffff; background-color: {{ $order['status']->color }}">{{ $order['status']->name }}</p></td>
                                     </tr>
